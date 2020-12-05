@@ -1,4 +1,6 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
@@ -16,7 +18,7 @@ class NewVisitorTest(unittest.TestCase):
 
 		#she glances over and does not notice that the title says to-do, but it just feels right.
 
-		self.assertIn('To-Do', self.browser.title)
+		self.assertIn('To-do', self.browser.title)
 		
 		#Maybe she reads the headline for once
 		header_text = self.browser.find_element_by_tag_name('h1').text
@@ -42,7 +44,7 @@ class NewVisitorTest(unittest.TestCase):
 		time.sleep(1)
 
 		table = self.browser.find_element_by_id('id_list_table')
-		rows = table.find_element_by_tag_name('tr')
+		rows = table.find_elements_by_tag_name('tr')
 		self.assertTrue(
 			any(row.text == '1. revise resume' for row in rows)
 			)
