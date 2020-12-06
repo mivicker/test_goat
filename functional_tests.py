@@ -11,6 +11,11 @@ class NewVisitorTest(unittest.TestCase):
 	def tearDown(self):
 		self.browser.quit()
 
+	def check_for_row_in_list_table(self, row_text):
+		table = self.browser.find_element_by_id('id_list_table')
+		rows = table.find_elements_by_tag_name('tr')
+		self.assertIn(row_text, [row.text for row in rows])
+
 	def test_can_start_a_list_and_retrieve_it_later(self):
 		#Edith has heard about her boy mikes to-do app and is ready to check it out,
 
@@ -43,18 +48,25 @@ class NewVisitorTest(unittest.TestCase):
 		inputbox.send_keys(Keys.ENTER)
 		time.sleep(1)
 
-		table = self.browser.find_element_by_id('id_list_table')
-		rows = table.find_elements_by_tag_name('tr')
-		self.assertTrue(
-			any(row.text == '1. revise resume' for row in rows)
-			)
-
-		self.fail('Finish the test!')
+		self.check_for_row_in_list_table('1. revise resume')
+		
 		#This leads to another item 'email resume to someone who doesn't care' which is 
 		#both a task and the admittion of failure.
 
+		inputbox = self.browser.find_element_by_id('id_new_item')
+		inputbox.send_keys("email resume to someone who doesn't care")
+		inputbox.send_keys(Keys.ENTER)
+		time.sleep(1)
+
+		self.check_for_row_in_list_table("1. revise resume")
+		self.check_for_row_in_list_table("2. email resume to someone who doesn't care")
+
+
+
 		#The page updates, showing both, and edith wonders if this is worth it at all
 		#Will she keep this pointless habit?
+
+		self.fail('Finish the test!')
 
 if __name__ == '__main__':
 	unittest.main()
