@@ -12,7 +12,9 @@
 		
 		<table id="id_list_table">
 			<!-- tr is table row, td is table data cell -->
-			<tr><td>1. {{ new_item_text }}</td></tr>
+			{% for item in items %}
+				<tr><td>{{ forloop.counter}}. {{ item.text }}</td></tr>
+			{% endfor %}
 		</table>
 	
 	</body>
