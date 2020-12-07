@@ -1,9 +1,10 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import unittest
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
 	def setUp(self):
 		self.browser = webdriver.Firefox()
@@ -19,7 +20,7 @@ class NewVisitorTest(unittest.TestCase):
 	def test_can_start_a_list_and_retrieve_it_later(self):
 		#Edith has heard about her boy mikes to-do app and is ready to check it out,
 
-		self.browser.get('http://localhost:8000')
+		self.browser.get(self.live_server_url)
 
 		#she glances over and does not notice that the title says to-do, but it just feels right.
 
@@ -60,8 +61,6 @@ class NewVisitorTest(unittest.TestCase):
 
 		self.check_for_row_in_list_table("1. revise resume")
 		self.check_for_row_in_list_table("2. email resume to someone who doesn't care")
-
-
 
 		#The page updates, showing both, and edith wonders if this is worth it at all
 		#Will she keep this pointless habit?
