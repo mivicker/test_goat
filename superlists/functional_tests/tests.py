@@ -95,7 +95,7 @@ class NewVisitorTest(LiveServerTestCase):
 
 		#Edith notices that her list has a unique url
 		edith_list_url = self.browser.current_url
-		self.assertEqual(edith_list_url, '/lists/.+')
+		self.assertRegex(edith_list_url, '/lists/.+')
 
 		self.browser.quit()
 		self.browser = webdriver.Firefox()
@@ -113,6 +113,12 @@ class NewVisitorTest(LiveServerTestCase):
 		inputbox.send_keys('buy milk')
 		inputbox.send_keys(Keys.ENTER)
 		self.wait_for_row_in_list_table('1. buy milk')
+
+		#Francis notices her url is fresh, not ediths.
+
+		francis_list_url = self.browser.current_url
+		self.assertRegex(francis_list_url, '/lists/.+')
+		self.assertNotEqual(francis_list_url, edith_list_url)
 
 		#Check again that nothing from edith's list is showing up and that the new items are availble
 
