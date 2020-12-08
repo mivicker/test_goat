@@ -75,8 +75,6 @@ class NewVisitorTest(LiveServerTestCase):
 		#The page updates, showing both, and edith wonders if this is worth it at all
 		#Will she keep this pointless habit?
 
-		self.fail('Finish the test!')
-
 	def test_multiple_users_can_start_lists_at_different_urls(self):
 		#Edith starts a new to-do list
 		self.browser.get(self.live_server_url)

@@ -40,7 +40,7 @@ class ItemModelTest(TestCase):
 		response = self.client.post('/', data = {'item_text': 'A new list item'})
 
 		self.assertEqual(response.status_code, 302)
-		self.assertEqual(response['location'], '/')
+		self.assertEqual(response['location'], '/lists/the-only-list/')
 
 	def test_only_saves_items_when_necessary(self):
 		self.client.get('/')
@@ -54,3 +54,14 @@ class ItemModelTest(TestCase):
 
 		self.assertIn('item1', response.content.decode())
 		self.assertIn('item2', response.content.decode())
+
+class ListViewTest(TestCase):
+
+		def test_displays_all_list_items(self):
+			Item.objects.create(text="item1")
+			Item.objects.create(text="item2")
+
+			response = self.client.get('/lists/the-only-list/')
+
+			self.assertContains(response, 'item1')
+			self.assertContains(response, 'item2')
