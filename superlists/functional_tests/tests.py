@@ -17,17 +17,18 @@ class NewVisitorTest(LiveServerTestCase):
 
 	def wait_for_row_in_list_table(self, row_text):
 		start_time = time.time()
-		try:
-			table = self.browser.find_element_by_id('id_list_table')
-			rows = table.find_elements_by_tag_name('tr')
-			self.assertIn(row_text, [row.text for row in rows])
-			return
-		except (AssertionError, WebDriverException) as e:
-			if time.time() - start_time > MAX_WAIT:
-				raise e
-			time.sleep(0.5)
+		while True:
+			try:
+				table = self.browser.find_element_by_id('id_list_table')
+				rows = table.find_elements_by_tag_name('tr')
+				self.assertIn(row_text, [row.text for row in rows])
+				return
+			except (AssertionError, WebDriverException) as e:
+				if time.time() - start_time > MAX_WAIT:
+					raise e
+				time.sleep(0.5)
 
-	def test_can_start_a_list_and_retrieve_it_later(self):
+	def test_can_start_a_list_for_one_user(self):
 		#Edith has heard about her boy mikes to-do app and is ready to check it out,
 
 		self.browser.get(self.live_server_url)
@@ -57,7 +58,6 @@ class NewVisitorTest(LiveServerTestCase):
 		#When she hits enter, the page updates and displays her knew item urgently
 
 		inputbox.send_keys(Keys.ENTER)
-		time.sleep(1)
 
 		self.wait_for_row_in_list_table('1. revise resume')
 		
@@ -67,10 +67,9 @@ class NewVisitorTest(LiveServerTestCase):
 		inputbox = self.browser.find_element_by_id('id_new_item')
 		inputbox.send_keys("email resume to someone who doesn't care")
 		inputbox.send_keys(Keys.ENTER)
-		time.sleep(1)
 
-		self.wait_for_row_in_list_table("1. revise resume")
 		self.wait_for_row_in_list_table("2. email resume to someone who doesn't care")
+		self.wait_for_row_in_list_table("1. revise resume")
 
 		#The page updates, showing both, and edith wonders if this is worth it at all
 		#Will she keep this pointless habit?
@@ -82,7 +81,7 @@ class NewVisitorTest(LiveServerTestCase):
 		inputbox.send_keys("revise resume")
 		inputbox.send_keys(Keys.ENTER)
 
-		self.wait_for_row_in_list_table("revise resume")
+		self.wait_for_row_in_list_table("1. revise resume")
 
 		inputbox = self.browser.find_element_by_id('id_new_item')
 		inputbox.send_keys("email resume to someone who doesn't care")
@@ -100,7 +99,7 @@ class NewVisitorTest(LiveServerTestCase):
 
 		#Check that nothing from edith's list is coming through on the new list.
 
-		self.brower.get(self.live_server_url)
+		self.browser.get(self.live_server_url)
 		page_text = self.browser.find_element_by_tag_name('body').text
 		self.assertNotIn('revise resume', page_text)
 		self.assertNotIn("email resume to someone who doesn't care", page_text)
