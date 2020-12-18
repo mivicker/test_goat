@@ -83,13 +83,6 @@ class NewVisitorTest(LiveServerTestCase):
 
 		self.wait_for_row_in_list_table("1. revise resume")
 
-		inputbox = self.browser.find_element_by_id('id_new_item')
-		inputbox.send_keys("email resume to someone who doesn't care")
-		inputbox.send_keys(Keys.ENTER)
-		
-		self.wait_for_row_in_list_table("1. revise resume")
-		self.wait_for_row_in_list_table("2. email resume to someone who doesn't care")
-
 		#Edith notices that her list has a unique url
 		edith_list_url = self.browser.current_url
 		self.assertRegex(edith_list_url, '/lists/.+')
