@@ -1,6 +1,6 @@
 goat_env
 db.sqlite3
 geckodriver.log
-goat_env
 __pycache__
 *.pyc
+.env
